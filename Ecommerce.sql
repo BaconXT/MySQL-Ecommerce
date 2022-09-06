@@ -103,7 +103,7 @@ select * from Fornecedores;
 select sum(ProdQuantidade * ProdPreco) as total from Produtos where ForId =1;
 select ProdId as Codigo, ProdNome as Nome, ProdQuantidade as Quantidade, ProdCategoria as Categoria, ProdDescricao as Descricao, ProdDataCad as Data_De_Cadastro, ProdPreco as Preco from Produtos;
 
--- !!!Table Clientes!!! / !!!Table Clients!!!--
+-- !!!Tabela Clientes!!! / !!!Table Clients!!!--
 create table Clientes(
 CliId int primary key auto_increment,
 CliNome varchar(105) not null,
@@ -163,3 +163,28 @@ select * from Pedidos;
 
                -- !!!Foreign Key and Primary Key!!! / !!!Chave Estrageira e Chave Primaria!!!--
 select * from Pedidos inner join Clientes on Pedidos.CliId = Clientes.CliId;
+
+-- !!! Using date format for Brazil(day, month and last as year) and USA(month, day and last as year) !!! --
+-- !!! Usando formato de data para o Brasil(dia, mês e por ultimo, ano) e EUA(mês, dia e por ultimo, ano) !!! --
+select Pedidos.PedId, 
+date_format(Pedidos.DataPed, '%d%m%Y - %H:%i') as DataPed, 
+Clientes.CliNome as Cliente, 
+Clientes.CliFone as Contato
+from Pedidos inner join Clientes
+on Pedidos.CliId = Clientes.CliId;
+
+ -- !!! Table Cart !!! / !!! Tabela Carrinho !!! --
+create table carrinho (
+PedId int not null,
+ProdId int not null,
+quantidade int not null,
+foreign key(PedId) references Pedidos(PedId),
+foreign key(ProdId) references Produtos(ProdId)
+);
+-- !!! Discribing Cart !!! / !!! Descrevendo Carrinho !!! --
+describe carrinho;
+
+-- !!! Inserting into Cart Request(Id 2 and  Id 1), Product(Id 2 and Id 6) and for last how many the Client want !!! --
+-- !!! Inserindo em Carrinho Pedido(Id 2 e Id 1), Produto(Id 2 e Id 6) e por ultimo a quantidade que o Cliente ira querer !!! --
+insert into carrinho values (2,2,1);
+insert into carrinho values (1,6,2);
